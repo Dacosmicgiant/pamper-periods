@@ -42,8 +42,6 @@ app.use(cors({
   exposedHeaders: ['Content-Range', 'X-Content-Range']  // ← ADDED: Exposed headers
 }));
 
-// Handle preflight requests explicitly
-app.options('*', cors());
 
 
 // ------------ EXISTING ROUTES ------------
