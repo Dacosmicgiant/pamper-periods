@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+:root{
+  --brand-pink: #ff5c9e;
+  --brand-rose: #ffd1e6;
+  --brand-deep: #ff2d7f;
+}
+
+/* Smooth scroll */
+html, body {
+  overflow-x: hidden !important;
+}
+
+
+/* default */
+body {
+ 
+  background: linear-gradient(180deg,var(--brand-rose) 0%, #fff 60%);
+}
+
+/* ===============================
+   DASHBOARD override (important)
+   ===============================*/
+body.vendor-dashboard-active {
+  background: var(--dashboard-bg, #f3f4f6) !important;
+}
+
+.vendor-scroll-area {
+  height: calc(100vh - 80px);
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.vendor-wrapper {
+  height: 100vh;
+  overflow: hidden !important;
+}
+
+.vendor-content {
+  height: calc(100vh - 70px); /* topbar height */
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* small utility for reveal */
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* floating card animation */
+@keyframes floaty {
+  0% { transform: translateY(0);}
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+.floating {
+  animation: floaty 5s ease-in-out infinite;
+}
+
+/* premium shadow */
+.shadow-premium{
+  box-shadow: 0 10px 30px rgba(255,92,158,0.12);
+}
+
+/* product image zoom */
+.img-zoom { transition: transform .35s ease; }
+.img-zoom:hover { transform: scale(1.05); }
+
+/* glass panel */
+.glass {
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(6px);
+}
+
+/* skeleton */
+.skeleton {
+  background: linear-gradient(90deg, #e2e2e2 25%, #f4f4f4 37%, #e2e2e2 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+/* fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* hide scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -webkit-overflow-scrolling: touch;
+}
