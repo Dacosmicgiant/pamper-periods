@@ -1,5 +1,13 @@
-// Helper function for Cloudinary uploads - Add to frontend utils
+// Helper function for Cloudinary uploads - Production Ready
 // File: frontend/src/utils/cloudinaryUpload.js
+
+// Get API base URL from environment variables
+const getApiBaseUrl = () => {
+  const raw = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  return raw.startsWith("http://") || raw.startsWith("https://")
+    ? raw
+    : `https://${raw}`;
+};
 
 /**
  * Upload single image to Cloudinary
@@ -13,7 +21,9 @@ export const uploadSingleImage = async (file, folder = "uploads") => {
     formData.append("folder", folder);
 
     const token = localStorage.getItem("token");
-    const response = await fetch("http://localhost:5000/api/upload/single", {
+    const apiBaseUrl = getApiBaseUrl();
+    
+    const response = await fetch(`${apiBaseUrl}/upload/single`, {
         method: "POST",
         headers: {
             Authorization: `Bearer ${token}`,
@@ -44,7 +54,9 @@ export const uploadMultipleImages = async (files, folder = "uploads") => {
     formData.append("folder", folder);
 
     const token = localStorage.getItem("token");
-    const response = await fetch("http://localhost:5000/api/upload/multiple", {
+    const apiBaseUrl = getApiBaseUrl();
+    
+    const response = await fetch(`${apiBaseUrl}/upload/multiple`, {
         method: "POST",
         headers: {
             Authorization: `Bearer ${token}`,

@@ -6,6 +6,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "../../components/Toast";
 import { Edit3 } from "lucide-react";
 
+const getApiBaseUrl = () => {
+  const raw = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  return raw.startsWith("http://") || raw.startsWith("https://")
+    ? raw
+    : `https://${raw}`;
+};
+
 export default function VendorEditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -64,7 +71,7 @@ export default function VendorEditProduct() {
       formData.append("folder", "products");
 
       const token = localStorage.getItem("vendorToken") || localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/upload/multiple", {
+      const response = await fetch(`${getApiBaseUrl()}/upload/`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

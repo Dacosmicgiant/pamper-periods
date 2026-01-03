@@ -16,6 +16,14 @@ import {
   Key,
 } from "lucide-react";
 
+// Get API base URL
+const getApiBaseUrl = () => {
+  const raw = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  return raw.startsWith("http://") || raw.startsWith("https://")
+    ? raw
+    : `https://${raw}`;
+};
+
 // --- Sub-components moved OUTSIDE to prevent re-mounting on every keystroke ---
 
 const Section = ({ icon: Icon, title, subtitle, children }) => (
@@ -124,7 +132,9 @@ export default function StoreSettings() {
       formData.append("folder", "vendors");
 
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/upload/single", {
+      const apiBaseUrl = getApiBaseUrl();
+      
+      const response = await fetch(`${apiBaseUrl}/upload/single`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
