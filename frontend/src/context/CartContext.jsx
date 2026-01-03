@@ -1,11 +1,11 @@
 import React, { createContext, useState, useEffect, useRef } from "react";
-import API from "../api/api"; // your axios instance
-import { useAuth } from "./AuthContext"; // your existing hook
+import API from "../api/api";
+import { useAuth } from "./AuthContext";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const { user } = useAuth(); // listens to login/logout
+  const { user } = useAuth();
   const [cart, setCart] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("cart")) || [];
@@ -14,11 +14,12 @@ export const CartProvider = ({ children }) => {
     }
   });
 
-  // unique id generator (you already had this)
+  // Track previous user to detect logout
+  const prevUserRef = useRef(user);
+
   const generateId = () =>
     Date.now().toString() + Math.random().toString(36).slice(2);
 
-  // helper: persist local cart (always)
   const persistLocal = (c) => {
     try {
       localStorage.setItem("cart", JSON.stringify(c));
@@ -27,23 +28,18 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // helper: push cart to server for this user (replace / merge on backend as you like)
   const pushCartToServer = async (c) => {
     if (!user) return;
     try {
-      // server endpoint expected: POST /users/:userId/cart
-      // payload: { cart: [...] } (server should replace or merge as desired)
       await API.post(`/user/cart`, { cart: c });
     } catch (err) {
       console.warn("Failed to sync cart to server", err);
     }
   };
 
-  // fetch server cart for logged in user
   const fetchServerCart = async () => {
     if (!user) return null;
     try {
-      // server endpoint expected: GET /users/:userId/cart -> { cart: [...] }
       const { data } = await API.get(`/user/cart`);
       return data?.cart ?? [];
     } catch (err) {
@@ -52,13 +48,9 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // merge two carts (serverCart and localCart):
-  // For bundles/products we use uniqueId to keep distinct variant/color combos.
-  // If an incoming cart item lacks uniqueId (older server), we generate one.
   const mergeCarts = (serverCart = [], localCart = []) => {
     const out = [...serverCart.map((i) => ({ ...i }))];
 
-    // index by a matching key: productId + variant + color
     const key = (it) =>
       `${it.productId ?? it.product}-${it.variant ?? ""}::${it.color ?? ""}`;
 
@@ -67,11 +59,9 @@ export const CartProvider = ({ children }) => {
     for (const localItem of localCart) {
       const localKey = key(localItem);
       if (map.has(localKey)) {
-        // sum qty
         const existing = map.get(localKey);
         map.set(localKey, { ...existing, qty: (existing.qty || 0) + (localItem.qty || 0) });
       } else {
-        // ensure uniqueId exists
         const itemToAdd = {
           ...localItem,
           uniqueId: localItem.uniqueId || generateId(),
@@ -84,55 +74,62 @@ export const CartProvider = ({ children }) => {
     return Array.from(map.values());
   };
 
-  // effect: persist local whenever cart changes, and sync to server if user logged in
-  // small debounce using ref to avoid flooding server on rapid changes
+  // 🔥 NEW: Detect logout and clear cart
+  useEffect(() => {
+    const wasLoggedIn = prevUserRef.current;
+    const isLoggedIn = user;
+
+    // Detect logout: was logged in, now not logged in
+    if (wasLoggedIn && !isLoggedIn) {
+      console.log("🚪 User logged out - clearing cart");
+      setCart([]);
+      localStorage.removeItem("cart");
+    }
+
+    // Update ref for next comparison
+    prevUserRef.current = user;
+  }, [user]);
+
+  // Persist local cart and sync to server
   const syncTimerRef = useRef(null);
   useEffect(() => {
     persistLocal(cart);
 
-    // if user logged in, push to server after short delay
     if (user) {
       if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
       syncTimerRef.current = setTimeout(() => {
         pushCartToServer(cart);
         syncTimerRef.current = null;
-      }, 400); // 400ms debounce
+      }, 400);
     }
-    // cleanup
+
     return () => {
       if (syncTimerRef.current) {
         clearTimeout(syncTimerRef.current);
         syncTimerRef.current = null;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart, user?.id, user?.token]);
 
-  // effect: on login, fetch server cart, merge with local and set merged
+  // Sync on login: merge server cart with local cart
   useEffect(() => {
     let mounted = true;
     const syncOnLogin = async () => {
-      if (!user) {
-        // user logged out: keep local cart as-is (so guest still has it)
-        return;
-      }
+      if (!user) return;
 
-      // 1) fetch server cart
-      const serverCart = await fetchServerCart(); // can be [] or null on failure
+      const serverCart = await fetchServerCart();
       if (!mounted) return;
 
       const localCart = (() => {
         try {
           return JSON.parse(localStorage.getItem("cart")) || [];
         } catch {
-          return cart; // fallback to current state
+          return cart;
         }
       })();
 
-      // If serverCart null (failed), prefer local cart
       const merged = serverCart === null ? localCart : mergeCarts(serverCart, localCart);
 
-      // make sure each item has uniqueId & productId naming consistent
       const normalized = merged.map((it) => ({
         ...it,
         uniqueId: it.uniqueId || generateId(),
@@ -141,11 +138,10 @@ export const CartProvider = ({ children }) => {
 
       setCart(normalized);
 
-      // push normalized merged cart to server (so server stores merged state)
       try {
         await pushCartToServer(normalized);
       } catch (e) {
-        // already handled in pushCartToServer
+        // Already handled
       }
     };
 
@@ -153,18 +149,14 @@ export const CartProvider = ({ children }) => {
     return () => {
       mounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
-  /* -------------------------------
-     CART OPERATIONS
-  ------------------------------- */
+  /* CART OPERATIONS */
 
   const addToCart = (item, qty = 1, variant = null, color = null) => {
     setCart((prev) => {
       const isBundle = item.type === "bundle" || item.items;
       if (isBundle) {
-        // identify by productId + variant + color
         const productId = item._id || item.productId || item.id;
         const exists = prev.find(
           (i) =>
@@ -181,7 +173,6 @@ export const CartProvider = ({ children }) => {
               : i
           );
         }
-        // add new bundle item
         return [
           ...prev,
           {
@@ -198,7 +189,6 @@ export const CartProvider = ({ children }) => {
         ];
       }
 
-      // normal product (identify by productId)
       const productId = item._id || item.productId || item.id;
       const exists = prev.find((i) => i.productId === productId);
       if (exists) {
@@ -233,7 +223,7 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCart([]);
-    // optionally delete server cart
+    localStorage.removeItem("cart");
     if (user) {
       (async () => {
         try {
