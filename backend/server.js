@@ -14,34 +14,19 @@ connectDB();
 // ------------ GLOBAL MIDDLEWARES ------------
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true }));
-
-// ------------ CORS CONFIGURATION (FIXED) ------------
 const corsOrigins = (process.env.CLIENT_URL || "*")
   .split(",")
   .map(s => s.trim());
 
-console.log('🔐 CORS Allowed Origins:', corsOrigins);
-
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, Postman)
     if (!origin) return callback(null, true);
-    
-    // Check if origin is allowed
     if (corsOrigins.includes("*") || corsOrigins.includes(origin)) {
-      console.log('✅ CORS allowed for:', origin);
       return callback(null, true);
     }
-    
-    console.log('❌ CORS blocked for:', origin);
     return callback(new Error("Not allowed by CORS"));
-  },
-  credentials: true,                                    // ← ADDED: Allow cookies
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],  // ← ADDED: Allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],  // ← ADDED: Allowed headers
-  exposedHeaders: ['Content-Range', 'X-Content-Range']  // ← ADDED: Exposed headers
+  }
 }));
-
 
 
 // ------------ EXISTING ROUTES ------------
@@ -68,56 +53,19 @@ app.use("/api/vendor/bundles", require("./routes/vendorBundles"));
 // vendorRoutes = vendor dashboard login, analytics, add product, edit product
 app.use("/api/vendor-public", require("./routes/vendorPublic"));
 
+// WhatsApp test endpoint
+app.use("/api/whatsapp", require("./routes/testWhatsApp"));
+
+
 
 // ------------ ROOT ROUTE ------------
 app.get("/", (req, res) => {
   res.send("GiftStore API Running");
 });
 
-// Health check route
-app.get("/api/health", (req, res) => {
-  res.json({ 
-    success: true, 
-    message: "API is running",
-    timestamp: new Date().toISOString()
-  });
-});
-
-
-// ------------ ERROR HANDLING MIDDLEWARE ------------
-// 404 handler
-app.use((req, res, next) => {
-  res.status(404).json({
-    success: false,
-    message: `Route ${req.originalUrl} not found`
-  });
-});
-
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error('❌ Error:', err.message);
-  console.error(err.stack);
-  
-  // CORS error
-  if (err.message === "Not allowed by CORS") {
-    return res.status(403).json({
-      success: false,
-      message: "CORS policy: This origin is not allowed to access this resource"
-    });
-  }
-  
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
-});
-
 
 // ------------ START SERVER ------------
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server started on port ${PORT}`);
-  console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔐 CORS Origins: ${corsOrigins.join(', ')}`);
-});
+app.listen(PORT, () =>
+  console.log(`🚀 Server started on port ${PORT}`)
+);

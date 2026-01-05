@@ -1,11 +1,12 @@
 const router = require("express").Router();
 const User = require("../models/User");
+const { protect } = require("../middlewares/auth");
 
 // Wishlist must come FIRST
-router.get("/:userId/wishlist", async (req, res) => {
+// Wishlist must come FIRST
+router.get("/wishlist", protect, async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId)
-      .populate("wishlist");
+    const user = await User.findById(req.user._id).populate("wishlist");
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
@@ -15,17 +16,15 @@ router.get("/:userId/wishlist", async (req, res) => {
   }
 });
 
-router.post("/:userId/wishlist", async (req, res) => {
+router.post("/wishlist", protect, async (req, res) => {
   try {
     const { productId } = req.body;
 
-    const user = await User.findById(req.params.userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    if (!user.wishlist.includes(productId)) {
-      user.wishlist.push(productId);
-      await user.save();
-    }
+    // Use $addToSet to prevent duplicates automatically
+    // Use req.user._id from token instead of insecure URL param
+    await User.findByIdAndUpdate(req.user._id, {
+      $addToSet: { wishlist: productId },
+    });
 
     res.json({ message: "Added to wishlist" });
   } catch (err) {
@@ -34,12 +33,12 @@ router.post("/:userId/wishlist", async (req, res) => {
   }
 });
 
-router.delete("/:userId/wishlist/:productId", async (req, res) => {
+router.delete("/wishlist/:productId", protect, async (req, res) => {
   try {
-    const { userId, productId } = req.params;
+    const { productId } = req.params;
 
     const user = await User.findByIdAndUpdate(
-      userId,
+      req.user._id,
       { $pull: { wishlist: productId } },
       { new: true }
     );

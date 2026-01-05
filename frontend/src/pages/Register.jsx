@@ -52,7 +52,7 @@ export default function Register() {
             </div>
             <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase">Join Us</h2>
             <p className="text-gray-500 mt-2 font-medium">
-              Start your journey with <span className="text-pink-600">Pamper Periods</span>
+              Start your journey with <span className="text-pink-600">Pamper Period</span>
             </p>
           </div>
 

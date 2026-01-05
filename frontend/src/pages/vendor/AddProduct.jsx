@@ -7,12 +7,14 @@ import { useToast } from "../../components/Toast";
 
 import { Plus, UploadCloud, Tag, IndianRupee } from "lucide-react";
 
+// Get API base URL from environment variables
 const getApiBaseUrl = () => {
   const raw = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
   return raw.startsWith("http://") || raw.startsWith("https://")
     ? raw
     : `https://${raw}`;
 };
+
 export default function AddProduct() {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -55,7 +57,8 @@ export default function AddProduct() {
       formData.append("folder", "products");
 
       const token = localStorage.getItem("vendorToken") || localStorage.getItem("token");
-      const response = await fetch(`${getApiBaseUrl()}/upload/`, {
+      const apiBaseUrl = getApiBaseUrl();
+      const response = await fetch(`${apiBaseUrl}/upload/multiple`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

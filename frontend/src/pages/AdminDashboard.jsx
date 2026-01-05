@@ -55,7 +55,7 @@ export default function AdminDashboard() {
         <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight">Analytics Console</h1>
-            <p className="text-gray-500 mt-1 font-medium">Real-time performance metrics for Pamper Periods.</p>
+            <p className="text-gray-500 mt-1 font-medium">Real-time performance metrics for Pamper Period.</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 px-4 py-2 rounded-2xl text-sm font-bold text-gray-500 shadow-sm">

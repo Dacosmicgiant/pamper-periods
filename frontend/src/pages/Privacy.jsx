@@ -65,7 +65,7 @@ export default function PrivacyPolicy() {
             </h2>
             <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed space-y-4">
               <p>
-                Welcome to <strong>Pamper Periods</strong>. We are committed to protecting your personal data and your right to privacy. If you have any questions or concerns about our policy, or our practices with regards to your personal information, please contact us at privacy@pamperperiods.com.
+                Welcome to <strong>Pamper Period</strong>. We are committed to protecting your personal data and your right to privacy. If you have any questions or concerns about our policy, or our practices with regards to your personal information, please contact us at privacy@pamperperiods.com.
               </p>
               <p>
                 When you visit our website and use our services, you trust us with your personal information. We take your privacy very seriously. In this privacy notice, we describe our privacy policy.

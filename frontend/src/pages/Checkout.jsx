@@ -431,8 +431,17 @@ export default function Checkout() {
       window.location.href = "/login";
       return;
     }
+
+    // Validate addresses exist
+    if (addresses.length === 0) {
+      alert("Please add a shipping address before proceeding with payment");
+      window.location.href = "/profile";
+      return;
+    }
+
+    // Validate address is selected
     if (!selectedAddress) {
-      alert("Select an address");
+      alert("Please select a shipping address");
       return;
     }
 
@@ -493,8 +502,16 @@ export default function Checkout() {
       };
 
       const rzp = new window.Razorpay(options);
-      rzp.on("payment.failed", function (resp) {
+      rzp.on("payment.failed", async function (resp) {
         setLoading(false);
+
+        // Update order status to failed
+        try {
+          await API.put(`/orders/${data.orderId}/status`, { status: "failed" });
+        } catch (err) {
+          console.error("Failed to update order status:", err);
+        }
+
         alert(resp.error?.description || "Payment failed");
       });
       rzp.open();
@@ -601,7 +618,7 @@ export default function Checkout() {
                     </div>
 
                     <div className="text-right">
-                      <p className="font-bold text-sm sm:text-base">₹{item.price * item.qty}</p>
+                      <p className="font-bold text-sm sm:text-base">₹{(Number(item.price) || 0) * (Number(item.qty) || 1)}</p>
                     </div>
                   </motion.div>
                 ))}

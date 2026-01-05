@@ -12,8 +12,8 @@ export default function ProductCard({ p }) {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   // --- Compute correct discount UI ---
-  const basePrice = p.price;
-  const final = p.finalPrice ?? p.price;
+  const basePrice = Number(p.price) || 0;
+  const final = Number(p.finalPrice ?? p.price) || 0;
 
   const discountPercent =
     basePrice > final ? Math.round(((basePrice - final) / basePrice) * 100) : 0;
@@ -23,7 +23,7 @@ export default function ProductCard({ p }) {
     if (!user) return;
     (async () => {
       try {
-        const { data } = await API.get(`/users/${user._id}/wishlist`);
+        const { data } = await API.get("/users/wishlist");
         const exists = data.some((item) => item._id === p._id);
         setLiked(exists);
       } catch (err) {
@@ -41,10 +41,10 @@ export default function ProductCard({ p }) {
     setLoading(true);
     try {
       if (!liked) {
-        await API.post(`/users/${user._id}/wishlist`, { productId: p._id });
+        await API.post("/users/wishlist", { productId: p._id });
         setLiked(true);
       } else {
-        await API.delete(`/users/${user._id}/wishlist/${p._id}`);
+        await API.delete(`/users/wishlist/${p._id}`);
         setLiked(false);
       }
     } catch (err) {
@@ -68,11 +68,10 @@ export default function ProductCard({ p }) {
         whileTap={{ scale: 0.9 }}
       >
         <FiHeart
-          className={`text-lg transition-all ${
-            liked 
-              ? "text-rose-500 fill-rose-500" 
-              : "text-slate-300 hover:text-rose-400"
-          } ${loading ? "opacity-50" : ""}`}
+          className={`text-lg transition-all ${liked
+            ? "text-rose-500 fill-rose-500"
+            : "text-slate-300 hover:text-rose-400"
+            } ${loading ? "opacity-50" : ""}`}
         />
       </motion.button>
 

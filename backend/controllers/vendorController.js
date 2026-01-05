@@ -90,7 +90,7 @@ exports.loginVendor = async (req, res) => {
       },
       token: generateToken(vendor._id),
     });
-    
+
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Server error" });
@@ -690,17 +690,18 @@ exports.deleteReply = asyncHandler(async (req, res) => {
 // UPDATE WHATSAPP SETTINGS
 // UPDATE WHATSAPP SETTINGS
 exports.updateWhatsAppSettings = asyncHandler(async (req, res) => {
-  const vendor = await Vendor.findOne({ user: req.user._id });
+  const vendor = await Vendor.findById(req.user._id);
 
   if (!vendor) return res.status(404).json({ message: "Vendor not found" });
 
   vendor.whatsappEnabled = req.body.whatsappEnabled;
   vendor.whatsappNumber = req.body.whatsappNumber;
-  vendor.whatsappInstance = req.body.whatsappInstance; // UltraMsg instance ID
-  vendor.whatsappToken = req.body.whatsappToken;       // UltraMsg token
+  vendor.ultraInstance = req.body.ultraInstance; // UltraMsg instance ID
+  vendor.ultraToken = req.body.ultraToken;       // UltraMsg token
 
   await vendor.save();
 
   res.json({ message: "WhatsApp settings updated successfully!", vendor });
 });
+
 

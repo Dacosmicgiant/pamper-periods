@@ -1,563 +1,3 @@
-// import React, { useEffect, useState, useContext, useRef } from "react";
-// import { useParams, Link } from "react-router-dom";
-// import API from "../api/api";
-// import { CartContext } from "../context/CartContext";
-// import ReviewGallery from "../components/ReviewGallery";
-// import AnimatedButton from "../components/AnimatedButton";
-// import useAuth from "../hooks/useAuth";
-
-// export default function ProductDetail() {
-//   const { id } = useParams();
-//   const { addToCart } = useContext(CartContext);
-//   const { user } = useAuth();
-
-//   const [product, setProduct] = useState(null);
-//   const [qty, setQty] = useState(1);
-
-//   const [related, setRelated] = useState([]);
-//   const [customersAlsoViewed, setCustomersAlsoViewed] = useState([]);
-
-//   const [mainIndex, setMainIndex] = useState(0);
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [modalIndex, setModalIndex] = useState(0);
-
-//   const [zoomPos, setZoomPos] = useState({ x: "50%", y: "50%" });
-//   const [isZooming, setIsZooming] = useState(false);
-//   const zoomRef = useRef(null);
-
-//   // NEW REVIEW STATES
-//   const [ratingInput, setRatingInput] = useState(0);
-//   const [commentInput, setCommentInput] = useState("");
-//   const [submitting, setSubmitting] = useState(false);
-//   const [hasReviewed, setHasReviewed] = useState(false);
-
-//   /* ===================================================
-//         1) LOAD PRODUCT
-//      =================================================== */
-//   useEffect(() => {
-//     let active = true;
-
-//     (async () => {
-//       try {
-//         const { data } = await API.get(`/products/${id}`);
-//         if (!active) return;
-//         setProduct(data);
-//         setMainIndex(0);
-//       } catch (err) {
-//         console.warn("Product load error", err);
-//       }
-//     })();
-
-//     return () => {
-//       active = false;
-//     };
-//   }, [id]);
-
-//   /* ===================================================
-//        Detect if user already reviewed this product
-//      =================================================== */
-//   useEffect(() => {
-//     if (!product || !user) return;
-
-//     const exists = product.reviews?.some((r) => r.user === user._id);
-//     setHasReviewed(exists);
-//   }, [product, user]);
-
-//   /* ===================================================
-//         2) RELATED PRODUCTS (same vendor)
-//      =================================================== */
-//   useEffect(() => {
-//     if (!product?.vendor?._id) return;
-
-//     let active = true;
-
-//     (async () => {
-//       try {
-//         const vendorId = product.vendor._id;
-//         const { data } = await API.get(`/products?vendor=${vendorId}&limit=8`);
-
-//         if (active) {
-//           setRelated((data || []).filter((p) => p._id !== product._id));
-//         }
-//       } catch (err) {
-//         console.warn("Related load err", err);
-//       }
-//     })();
-
-//     return () => { active = false; };
-//   }, [product?.vendor?._id]);
-
-//   /* ===================================================
-//         3) CUSTOMERS ALSO VIEWED (by category)
-//      =================================================== */
-//   useEffect(() => {
-//     if (!product) return;
-//     let active = true;
-
-//     (async () => {
-//       try {
-//         if (product.category) {
-//           const { data } = await API.get(
-//             `/products?category=${encodeURIComponent(product.category)}&limit=12`
-//           );
-
-//           if (active) {
-//             setCustomersAlsoViewed(
-//               (data || []).filter((p) => p._id !== product._id)
-//             );
-//           }
-//         } else if (product.vendor?._id) {
-//           const { data } = await API.get(
-//             `/products?vendor=${product.vendor._id}&limit=12`
-//           );
-
-//           if (active) {
-//             setCustomersAlsoViewed(
-//               (data || []).filter((p) => p._id !== product._id)
-//             );
-//           }
-//         }
-//       } catch (err) {
-//         console.warn("Customers viewed load err", err);
-//       }
-//     })();
-
-//     return () => { active = false; };
-//   }, [product, product?.category, product?.vendor?._id]);
-
-//   /* ===================================================
-//           Modal Navigation
-//      =================================================== */
-//   const openModal = (i = 0) => {
-//     setModalIndex(i);
-//     setIsModalOpen(true);
-//     document.body.style.overflow = "hidden";
-//   };
-
-//   const closeModal = () => {
-//     setIsModalOpen(false);
-//     document.body.style.overflow = "";
-//   };
-
-//   const nextModal = React.useCallback(() => {
-//     setModalIndex((i) => (i + 1) % product.images.length);
-//   }, [product]);
-
-//   const prevModal = React.useCallback(() => {
-//     setModalIndex((i) => (i - 1 + product.images.length) % product.images.length);
-//   }, [product]);
-
-//   useEffect(() => {
-//     const onKey = (e) => {
-//       if (!isModalOpen) return;
-//       if (e.key === "Escape") closeModal();
-//       if (e.key === "ArrowRight") nextModal();
-//       if (e.key === "ArrowLeft") prevModal();
-//     };
-
-//     window.addEventListener("keydown", onKey);
-//     return () => window.removeEventListener("keydown", onKey);
-//   }, [isModalOpen, nextModal, prevModal]);
-
-//   /* ===================================================
-//           Image Zoom Handler
-//      =================================================== */
-//   const handleMouseMove = (e) => {
-//     if (!zoomRef.current) return;
-//     const rect = zoomRef.current.getBoundingClientRect();
-//     const x = ((e.clientX - rect.left) / rect.width) * 100;
-//     const y = ((e.clientY - rect.top) / rect.height) * 100;
-//     setZoomPos({ x: `${x}%`, y: `${y}%` });
-//   };
-
-//   /* ===================================================
-//          POST REVIEW
-//      =================================================== */
-//   async function submitReview() {
-//     if (!user) return alert("Please login first!");
-//     if (!ratingInput) return alert("Select a rating");
-//     if (commentInput.length < 10)
-//       return alert("Comment must be at least 10 characters");
-
-//     try {
-//       setSubmitting(true);
-
-//       await API.post(`/products/${product._id}/review`, {
-//         rating: ratingInput,
-//         comment: commentInput,
-//       });
-
-//       alert("Review submitted!");
-
-//       // reload product
-//       const { data } = await API.get(`/products/${product._id}`);
-//       setProduct(data);
-
-//       setRatingInput(0);
-//       setCommentInput("");
-//       setHasReviewed(true);
-//     } catch (err) {
-//       alert(err.response?.data?.message || "Review failed");
-//     } finally {
-//       setSubmitting(false);
-//     }
-//   }
-
-//   /* ===================================================
-//                    Render
-//      =================================================== */
-//   if (!product)
-//     return <div className="text-center py-40 text-xl font-medium">Loading...</div>;
-
-//   const images = product.images?.length ? product.images : ["/placeholder.jpg"];
-//   const mainImage = images[mainIndex];
-
-//   const reviews = product.reviews || [];
-//   const reviewsCount = reviews.length;
-//   const avgRating =
-//     reviewsCount === 0
-//       ? 0
-//       : Math.round(
-//         (reviews.reduce((s, r) => s + (r.rating || 0), 0) / reviewsCount) * 10
-//       ) / 10;
-
-//   const breakdownCounts = [5, 4, 3, 2, 1].map(
-//     (s) => reviews.filter((r) => Math.round(r.rating || 0) === s).length
-//   );
-//   const breakdownTotal = breakdownCounts.reduce((s, n) => s + n, 0) || 1;
-
-//   return (
-//     <div className="font-display bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-200 py-10 px-6">
-//       <div className="max-w-7xl mx-auto">
-
-//         {/* --------------------------- */}
-//         {/*     Breadcrumb              */}
-//         {/* --------------------------- */}
-//         <div className="text-sm flex items-center gap-2 mb-6 text-neutral">
-//           <Link to="/">Home</Link>
-//           <span>/</span>
-//           <Link to="/products">Products</Link>
-//           <span>/</span>
-//           <span>{product.title}</span>
-//         </div>
-
-//         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-
-//           {/* ---------------------------- */}
-//           {/*         LEFT IMAGES          */}
-//           {/* ---------------------------- */}
-//           <div className="flex flex-col gap-4">
-
-//             {/* BIG IMAGE */}
-//             <div
-//               ref={zoomRef}
-//               onMouseMove={(e) => isZooming && handleMouseMove(e)}
-//               onMouseEnter={() => setIsZooming(true)}
-//               onMouseLeave={() => setIsZooming(false)}
-//               onClick={() => openModal(mainIndex)}
-//               className="w-full aspect-square rounded-xl shadow bg-center bg-cover cursor-zoom-in"
-//               style={{
-//                 backgroundImage: `url("${mainImage}")`,
-//                 backgroundPosition: isZooming
-//                   ? `${zoomPos.x} ${zoomPos.y}`
-//                   : "center",
-//                 backgroundSize: isZooming ? "200%" : "cover",
-//               }}
-//             />
-
-//             {/* THUMBNAILS */}
-//             <div className="grid grid-cols-4 gap-3">
-//               {images.map((img, idx) => (
-//                 <button
-//                   key={idx}
-//                   onClick={() => setMainIndex(idx)}
-//                   className={`aspect-square rounded-lg overflow-hidden border ${idx === mainIndex
-//                       ? "border-primary"
-//                       : "border-gray-200 dark:border-gray-700"
-//                     }`}
-//                 >
-//                   <div
-//                     className="w-full h-full bg-center bg-cover"
-//                     style={{ backgroundImage: `url("${img}")` }}
-//                   />
-//                 </button>
-//               ))}
-//             </div>
-//           </div>
-
-//           {/* ---------------------------- */}
-//           {/*        RIGHT DETAILS         */}
-//           {/* ---------------------------- */}
-//           <div className="flex flex-col gap-6">
-
-//             <h1 className="text-3xl md:text-4xl font-black">
-//               {product.title}
-//             </h1>
-
-//             {/* Rating */}
-//             <div className="flex items-center gap-3">
-//               <div className="flex items-center">
-//                 {Array.from({ length: 5 }).map((_, i) => {
-//                   const filled = i < Math.round(avgRating);
-//                   return (
-//                     <span
-//                       key={i}
-//                       className="material-symbols-outlined text-yellow-500"
-//                       style={{
-//                         fontVariationSettings: filled
-//                           ? "'FILL' 1"
-//                           : "'FILL' 0",
-//                       }}
-//                     >
-//                       star
-//                     </span>
-//                   );
-//                 })}
-//               </div>
-//               <div className="text-sm text-neutral">
-//                 {avgRating} • {reviewsCount} reviews
-//               </div>
-//             </div>
-
-//             {/* Price */}
-//             <div className="flex items-baseline gap-3">
-//               <p className="text-4xl font-bold">₹{product.price}</p>
-//               {product.oldPrice && (
-//                 <p className="text-lg line-through text-neutral">
-//                   ₹{product.oldPrice}
-//                 </p>
-//               )}
-//             </div>
-
-//             {/* Description */}
-//             <p className="text-gray-700 dark:text-gray-300">
-//               {product.description}
-//             </p>
-
-//             {/* Quantity + Cart */}
-//             <div className="flex items-center gap-4 mt-2">
-//               <input
-//                 type="number"
-//                 min="1"
-//                 value={qty}
-//                 onChange={(e) => setQty(Number(e.target.value))}
-//                 className="w-20 h-12 border rounded-lg bg-white dark:bg-gray-800 px-3"
-//               />
-//               <AnimatedButton onClick={() => addToCart(product, qty)}>
-//                 Add to Cart
-//               </AnimatedButton>
-
-//               {/* Wishlist */}
-//               <button
-//                 onClick={() => {
-//                   if (!user) return alert("Please login");
-//                   API.post(`/users/${user._id}/wishlist`, {
-//                     productId: product._id,
-//                   })
-//                     .then(() => alert("Added to wishlist"))
-//                     .catch(() => alert("Wishlist error"));
-//                 }}
-//                 className="h-12 px-4 rounded-lg bg-gray-200 dark:bg-gray-800"
-//               >
-//                 <span className="material-symbols-outlined">favorite</span>
-//               </button>
-//             </div>
-
-//             {/* Vendor */}
-//             <div className="mt-6 p-4 border rounded-lg bg-white dark:bg-gray-900 flex items-center gap-4">
-//               <div
-//                 className="w-12 h-12 bg-center bg-cover rounded-full"
-//                 style={{
-//                   backgroundImage: `url("${product.vendor?.logo || "/placeholder.jpg"}")`,
-//                 }}
-//               />
-//               <div className="flex-1">
-//                 <p className="text-sm text-neutral">Sold by</p>
-//                 <Link to={`/vendor/${product.vendor?._id}`} className="font-bold hover:text-primary">
-//                   {product.vendor?.shopName}
-//                 </Link>
-//               </div>
-//             </div>
-
-//             {/* ---------------------------- */}
-//             {/*         Reviews Section       */}
-//             {/* ---------------------------- */}
-//             <div className="mt-8">
-//               <h3 className="text-lg font-semibold mb-3">
-//                 Customer Reviews
-//               </h3>
-
-//               {/* Rating Overview */}
-//               <div className="bg-white dark:bg-gray-900 p-4 rounded-lg border mb-6">
-//                 <div className="flex justify-between mb-3">
-//                   <div>
-//                     <div className="text-3xl font-bold">{avgRating}</div>
-//                     <div className="text-sm text-neutral">average rating</div>
-//                   </div>
-//                   <div className="text-sm text-neutral">
-//                     {reviewsCount} reviews
-//                   </div>
-//                 </div>
-
-//                 {/* Breakdown Bars */}
-//                 <div className="space-y-2">
-//                   {[5, 4, 3, 2, 1].map((star, idx) => {
-//                     const count = breakdownCounts[idx];
-//                     const pct = Math.round((count / breakdownTotal) * 100);
-
-//                     return (
-//                       <div key={star} className="flex items-center gap-3">
-//                         <div className="w-10 text-sm">{star}★</div>
-//                         <div className="flex-1 bg-gray-200 dark:bg-gray-800 h-3 rounded">
-//                           <div
-//                             className="h-3 rounded"
-//                             style={{
-//                               width: `${pct}%`,
-//                               background: "linear-gradient(90deg,#f59e0b,#4f46e5)",
-//                             }}
-//                           />
-//                         </div>
-//                         <div className="w-12 text-sm text-right">{pct}%</div>
-//                       </div>
-//                     );
-//                   })}
-//                 </div>
-//               </div>
-
-//               {/* ------------ Review Form ------------ */}
-//               <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border">
-
-//                 <h3 className="text-lg font-bold mb-4">Write a Review</h3>
-
-//                 {!user ? (
-//                   <p className="text-red-500">
-//                     Please <Link to="/login" className="text-primary font-semibold">login</Link> to write a review.
-//                   </p>
-//                 ) : hasReviewed ? (
-//                   <p className="text-green-500 font-medium">You already reviewed this product.</p>
-//                 ) : (
-//                   <div className="space-y-4">
-
-//                     {/* Rating stars */}
-//                     <div className="flex gap-2">
-//                       {[1, 2, 3, 4, 5].map((star) => (
-//                         <button
-//                           key={star}
-//                           onClick={() => setRatingInput(star)}
-//                         >
-//                           <span
-//                             className="material-symbols-outlined text-3xl text-yellow-500"
-//                             style={{
-//                               fontVariationSettings:
-//                                 star <= ratingInput ? "'FILL' 1" : "'FILL' 0",
-//                             }}
-//                           >
-//                             star
-//                           </span>
-//                         </button>
-//                       ))}
-//                     </div>
-
-//                     {/* Comment */}
-//                     <textarea
-//                       rows={4}
-//                       value={commentInput}
-//                       onChange={(e) => setCommentInput(e.target.value)}
-//                       className="w-full p-3 bg-gray-100 dark:bg-gray-800 border rounded-lg"
-//                       placeholder="Share your experience..."
-//                     />
-
-//                     <button
-//                       onClick={submitReview}
-//                       disabled={submitting}
-//                       className="bg-primary text-white py-3 px-6 rounded-lg font-bold"
-//                     >
-//                       {submitting ? "Submitting..." : "Submit Review"}
-//                     </button>
-//                   </div>
-//                 )}
-//               </div>
-
-//               {/* Review List */}
-//               <ReviewGallery reviews={reviews.slice(0, 5)} />
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* ---------------------------- */}
-//         {/*       Related Products        */}
-//         {/* ---------------------------- */}
-//         <div className="mt-16">
-//           <h2 className="text-2xl font-bold mb-6">More from this Seller</h2>
-
-//           {related.length === 0 ? (
-//             <p>No related products found.</p>
-//           ) : (
-//             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-//               {related.map((rp) => (
-//                 <Link
-//                   key={rp._id}
-//                   to={`/product/${rp._id}`}
-//                   className="bg-white dark:bg-gray-900 rounded-xl border p-2 shadow hover:shadow-lg transition"
-//                 >
-//                   <div
-//                     className="w-full h-48 bg-center bg-cover rounded"
-//                     style={{
-//                       backgroundImage: `url("${rp.images?.[0] || "/placeholder.jpg"}")`,
-//                     }}
-//                   />
-//                   <div className="p-3">
-//                     <h3 className="font-semibold line-clamp-2">{rp.title}</h3>
-//                     <p className="text-neutral text-sm mt-1">₹{rp.price}</p>
-//                   </div>
-//                 </Link>
-//               ))}
-//             </div>
-//           )}
-//         </div>
-
-//         {/* ---------------------------- */}
-//         {/*        Modal Gallery         */}
-//         {/* ---------------------------- */}
-//         {isModalOpen && (
-//           <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
-
-//             <button
-//               onClick={closeModal}
-//               className="absolute top-6 right-6 text-white bg-white/30 p-3 rounded-full"
-//             >
-//               <span className="material-symbols-outlined">close</span>
-//             </button>
-
-//             <div className="w-full max-w-4xl">
-//               <img
-//                 src={images[modalIndex]}
-//                 alt=""
-//                 className="w-full max-h-[70vh] object-contain"
-//               />
-
-//               <div className="flex justify-between mt-4">
-//                 <button
-//                   onClick={prevModal}
-//                   className="bg-white/20 text-white px-5 py-2 rounded-lg"
-//                 >
-//                   Prev
-//                 </button>
-//                 <button
-//                   onClick={nextModal}
-//                   className="bg-white/20 text-white px-5 py-2 rounded-lg"
-//                 >
-//                   Next
-//                 </button>
-//               </div>
-//             </div>
-//           </div>
-//         )}
-
-//       </div>
-//     </div>
-//   );
-// }
 import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import API from "../api/api";
@@ -918,13 +358,13 @@ export default function ProductDetail() {
     reviewsCount === 0
       ? 0
       : Math.round(
-          (reviews.reduce(
-            (s, r) => s + (r.rating || 0),
-            0
-          ) /
-            reviewsCount) *
-            10
-        ) / 10;
+        (reviews.reduce(
+          (s, r) => s + (r.rating || 0),
+          0
+        ) /
+          reviewsCount) *
+        10
+      ) / 10;
   const breakdownCounts = [5, 4, 3, 2, 1].map(
     (st) =>
       reviews.filter(
@@ -987,9 +427,8 @@ export default function ProductDetail() {
                 enableZoom ? () => setIsZooming(false) : undefined
               }
               onClick={() => openModal(mainIndex)}
-              className={`w-full aspect-square rounded-2xl shadow-lg bg-center bg-cover border border-gray-100 overflow-hidden group relative ${
-                enableZoom ? "cursor-zoom-in" : "cursor-pointer"
-              }`}
+              className={`w-full aspect-square rounded-2xl shadow-lg bg-center bg-cover border border-gray-100 overflow-hidden group relative ${enableZoom ? "cursor-zoom-in" : "cursor-pointer"
+                }`}
               style={{
                 backgroundImage: `url("${mainImage}")`,
                 backgroundPosition:
@@ -1009,11 +448,10 @@ export default function ProductDetail() {
                   key={idx}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`aspect-square rounded-lg overflow-hidden border transition-all duration-200 ${
-                    idx === mainIndex
-                      ? "ring-2 ring-pink-500 ring-offset-1 border-pink-500"
-                      : "border-gray-200 hover:border-pink-300"
-                  }`}
+                  className={`aspect-square rounded-lg overflow-hidden border transition-all duration-200 ${idx === mainIndex
+                    ? "ring-2 ring-pink-500 ring-offset-1 border-pink-500"
+                    : "border-gray-200 hover:border-pink-300"
+                    }`}
                   onClick={() => setMainIndex(idx)}
                 >
                   <div
@@ -1056,13 +494,12 @@ export default function ProductDetail() {
                     •
                   </span>
                   <div
-                    className={`text-[11px] sm:text-xs px-2 py-1 rounded-full ${
-                      product.stock === 0
-                        ? "bg-red-100 text-red-700"
-                        : product.stock <= 10
+                    className={`text-[11px] sm:text-xs px-2 py-1 rounded-full ${product.stock === 0
+                      ? "bg-red-100 text-red-700"
+                      : product.stock <= 10
                         ? "bg-amber-100 text-amber-700"
                         : "bg-emerald-100 text-emerald-700"
-                    }`}
+                      }`}
                   >
                     {product.stock === 0
                       ? "Out of stock"
@@ -1197,7 +634,7 @@ export default function ProductDetail() {
                   onClick={() => {
                     if (!user) return alert("Please login");
                     API.post(
-                      `/users/${user._id}/wishlist`,
+                      "/users/wishlist",
                       { productId: product._id }
                     )
                       .then(() => alert("Added to wishlist"))
@@ -1220,9 +657,8 @@ export default function ProductDetail() {
                 <div
                   className="w-10 h-10 rounded-lg bg-center bg-cover border border-gray-200"
                   style={{
-                    backgroundImage: `url("${
-                      product.vendor?.logo || "/placeholder.jpg"
-                    }")`,
+                    backgroundImage: `url("${product.vendor?.logo || "/placeholder.jpg"
+                      }")`,
                   }}
                 />
                 <div className="flex-1">

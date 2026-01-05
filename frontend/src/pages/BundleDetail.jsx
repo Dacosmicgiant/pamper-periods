@@ -326,7 +326,7 @@
 //     if (!user) return alert("Please login to use wishlist");
 
 //     try {
-//       await API.post(`/users/${user._id}/wishlist`, {
+//       await API.post("/users/wishlist", {
 //         productId: bundle._id,
 //         type: "bundle",
 //       });
@@ -357,7 +357,7 @@
 
 //       {/* =================== MAIN CONTENT GRID =================== */}
 //       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        
+
 //         {/* Image Gallery */}
 //         <div className="space-y-4">
 //           <div className="relative rounded-2xl overflow-hidden shadow-xl bg-white p-4">
@@ -366,7 +366,7 @@
 //               alt={bundle.title}
 //               className="w-full h-80 object-cover rounded-xl"
 //             />
-            
+
 //             {/* Action Buttons */}
 //             <div className="absolute top-6 right-6 flex flex-col gap-3">
 //               <button
@@ -591,7 +591,7 @@
 //                 />
 //                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
 //               </div>
-              
+
 //               <div className="p-4">
 //                 <h4 className="font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-pink-600 transition-colors">
 //                   {item.title}
@@ -699,7 +699,7 @@ export default function BundleDetail() {
     alert("Added to cart!");
   };
 
-  const itemsSubtotal = (bundle.items || []).reduce((s, it) => s + (it.price || 0), 0);
+  const itemsSubtotal = (bundle.items || []).reduce((s, it) => s + Number(it.price || 0), 0);
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 font-sans selection:bg-pink-100 selection:text-pink-600">
@@ -733,20 +733,19 @@ export default function BundleDetail() {
             )}
             {bundle.oldPrice && (
               <div className="absolute top-4 left-4 bg-pink-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                SAVE {Math.round((1 - bundle.price / bundle.oldPrice) * 100)}%
+                SAVE {Math.round((1 - Number(bundle.price || 0) / Number(bundle.oldPrice || 1)) * 100)}%
               </div>
             )}
           </div>
-          
+
           {/* THUMBNAILS */}
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
             {images.map((img, idx) => (
               <button
                 key={idx}
                 onClick={() => goToImage(idx)}
-                className={`flex-none w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${
-                  idx === currentIndex ? "border-pink-500 ring-2 ring-pink-100" : "border-transparent opacity-70"
-                }`}
+                className={`flex-none w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${idx === currentIndex ? "border-pink-500 ring-2 ring-pink-100" : "border-transparent opacity-70"
+                  }`}
               >
                 <img src={img} className="w-full h-full object-cover" alt="preview" />
               </button>
@@ -759,8 +758,8 @@ export default function BundleDetail() {
           <div className="mb-6">
             <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">{bundle.title}</h1>
             <div className="flex items-baseline gap-4 mb-4">
-              <span className="text-4xl font-black text-pink-600">₹{bundle.price}</span>
-              {bundle.oldPrice && <span className="text-xl text-gray-400 line-through font-light">₹{bundle.oldPrice}</span>}
+              <span className="text-4xl font-black text-pink-600">₹{Number(bundle.price || 0).toLocaleString()}</span>
+              {bundle.oldPrice && <span className="text-xl text-gray-400 line-through font-light">₹{Number(bundle.oldPrice || 0).toLocaleString()}</span>}
             </div>
             <p className="text-gray-600 leading-relaxed text-lg">{bundle.description || "Indulge in our premium curated selection."}</p>
           </div>
@@ -774,9 +773,8 @@ export default function BundleDetail() {
                   <button
                     key={c}
                     onClick={() => setColor(c)}
-                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
-                      color === c ? "bg-pink-600 text-white shadow-lg shadow-pink-200" : "bg-white text-gray-600 hover:border-pink-300 border"
-                    }`}
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${color === c ? "bg-pink-600 text-white shadow-lg shadow-pink-200" : "bg-white text-gray-600 hover:border-pink-300 border"
+                      }`}
                   >
                     {c}
                   </button>
@@ -791,9 +789,8 @@ export default function BundleDetail() {
                   <button
                     key={v}
                     onClick={() => setVariant(v)}
-                    className={`py-3 rounded-xl text-xs font-bold transition-all ${
-                      variant === v ? "bg-pink-600 text-white shadow-lg shadow-pink-200" : "bg-white text-gray-600 border"
-                    }`}
+                    className={`py-3 rounded-xl text-xs font-bold transition-all ${variant === v ? "bg-pink-600 text-white shadow-lg shadow-pink-200" : "bg-white text-gray-600 border"
+                      }`}
                   >
                     {v}
                   </button>
@@ -811,7 +808,7 @@ export default function BundleDetail() {
               <span className="material-symbols-outlined">shopping_bag</span>
               Add Bundle to Cart
             </button>
-            <button 
+            <button
               onClick={() => setShareOpen(true)}
               className="px-6 rounded-2xl border-2 border-gray-200 text-gray-400 hover:border-pink-300 hover:text-pink-600 transition-colors flex items-center justify-center"
               title="Share"
@@ -872,12 +869,12 @@ export default function BundleDetail() {
       {/* SHARE MODAL */}
       <AnimatePresence>
         {shareOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             onClick={() => setShareOpen(false)}
           >
-            <motion.div 
+            <motion.div
               initial={{ y: 50, scale: 0.9 }} animate={{ y: 0, scale: 1 }} exit={{ y: 50, scale: 0.9 }}
               className="bg-white rounded-[2.5rem] p-8 w-full max-w-sm text-center shadow-2xl relative"
               onClick={e => e.stopPropagation()}
@@ -890,15 +887,15 @@ export default function BundleDetail() {
               </div>
               <h3 className="text-2xl font-black text-gray-900 mb-2">Share the Love</h3>
               <p className="text-gray-500 mb-8 leading-relaxed text-sm px-4">Show your friends this amazing bundle!</p>
-              
+
               <div className="grid gap-3">
-                <button 
+                <button
                   onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(bundle.title + " " + window.location.href)}`)}
                   className="w-full py-4 bg-[#25D366] text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:brightness-110 shadow-lg shadow-green-100 transition"
                 >
                   WhatsApp
                 </button>
-                <button 
+                <button
                   onClick={() => { navigator.clipboard.writeText(window.location.href); alert("Link Copied!"); }}
                   className="w-full py-4 bg-pink-600 text-white rounded-2xl font-bold hover:bg-pink-700 shadow-lg shadow-pink-100 transition"
                 >

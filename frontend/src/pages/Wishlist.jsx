@@ -15,7 +15,7 @@ export default function Wishlist() {
 
   const removeItem = async (productId) => {
     try {
-      await API.delete(`/users/${user._id}/wishlist/${productId}`);
+      await API.delete(`/users/wishlist/${productId}`);
 
       setItems((prev) => prev.filter((p) => p._id !== productId));
     } catch (err) {
@@ -29,7 +29,7 @@ export default function Wishlist() {
     let isMounted = true;
     const fetchWishlist = async () => {
       try {
-        const { data } = await API.get(`/users/${user._id}/wishlist`);
+        const { data } = await API.get(`/users/wishlist`);
         if (isMounted) setItems(data || []);
       } catch (err) {
         console.error(err);

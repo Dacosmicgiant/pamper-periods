@@ -28,7 +28,6 @@ const getApiBaseUrl = () => {
     ? raw
     : `https://${raw}`;
 };
-
 export default function VendorEditBundle() {
   const { id } = useParams();
   const { toast } = useToast();
@@ -138,7 +137,8 @@ export default function VendorEditBundle() {
       formData.append("folder", "bundles");
 
       const token = localStorage.getItem("token");
-      const response = await fetch(`${getApiBaseUrl()}/upload/`, {
+      const apiBaseUrl = getApiBaseUrl();
+  const response = await fetch(`${apiBaseUrl}/upload/multiple`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -187,7 +187,8 @@ export default function VendorEditBundle() {
       formData.append("folder", "bundles/items");
 
       const token = localStorage.getItem("token");
-      const response = await fetch(`${getApiBaseUrl()}/upload/`, {
+      const apiBaseUrl = getApiBaseUrl();
+      const response = await fetch(`${apiBaseUrl}/upload/single`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

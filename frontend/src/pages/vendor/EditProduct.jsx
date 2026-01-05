@@ -71,7 +71,8 @@ export default function VendorEditProduct() {
       formData.append("folder", "products");
 
       const token = localStorage.getItem("vendorToken") || localStorage.getItem("token");
-      const response = await fetch(`${getApiBaseUrl()}/upload/`, {
+      const apiBaseUrl = getApiBaseUrl();
+      const response = await fetch(`${apiBaseUrl}/upload/multiple`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -42,7 +42,7 @@ export default function AdminLayout({ children }) {
           <footer className="mt-20 pb-10 px-4 text-center">
             <div className="h-[1px] w-20 bg-gray-200 mx-auto mb-6" />
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">
-              Powered by Pamper Periods Admin Engine
+              Powered by Pamper Period Admin Engine
             </p>
           </footer>
         </main>

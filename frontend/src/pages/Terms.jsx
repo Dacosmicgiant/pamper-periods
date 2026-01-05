@@ -63,7 +63,7 @@ export default function TermsOfService() {
                 1. Acceptance of Terms
               </h2>
               <p className="text-sm leading-relaxed">
-                By accessing and using the <strong>Pamper Periods</strong> boutique platform, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree, please discontinue use of our site immediately.
+                By accessing and using the <strong>Pamper Period</strong> boutique platform, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree, please discontinue use of our site immediately.
               </p>
             </section>
 
@@ -97,7 +97,7 @@ export default function TermsOfService() {
             <section className="bg-slate-50 p-8 rounded-[2rem] border border-slate-100">
               <h2 className="text-xl font-bold text-slate-900 mb-4">4. Intellectual Property</h2>
               <p className="text-sm leading-relaxed">
-                The Service and its original content (excluding content provided by users), features, and functionality are and will remain the exclusive property of Pamper Periods and its licensors. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Pamper Periods.
+                The Service and its original content (excluding content provided by users), features, and functionality are and will remain the exclusive property of Pamper Period and its licensors. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Pamper Period.
               </p>
             </section>
 

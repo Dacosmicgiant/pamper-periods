@@ -62,7 +62,7 @@ export default function Sidebar() {
                 <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 border-2 border-white dark:border-gray-900 rounded-full"></div>
               </div>
               <div>
-                <p className="font-semibold text-gray-900 dark:text-white">Pamper Periods</p>
+                <p className="font-semibold text-gray-900 dark:text-white">Pamper Period</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
                   <BiTrendingUp className="w-3 h-3 text-green-500" />
                   Pro Seller

@@ -26,7 +26,7 @@ export default function Footer() {
               </div>
               <div>
                 <div className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-                  Pamper Periods
+                  Pamper Period
                 </div>
                 <div className="text-sm text-gray-500">Premium Gifting</div>
               </div>
@@ -107,7 +107,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-200 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <div className="text-gray-600 mb-4 md:mb-0 text-sm">
-            © {new Date().getFullYear()} Pamper Periods. All rights reserved.
+            © {new Date().getFullYear()} Pamper Period. All rights reserved.
           </div>
           <div className="flex gap-6 text-sm text-gray-600">
             <Link to="/privacy" className="hover:text-pink-600 transition-colors">Privacy Policy</Link>

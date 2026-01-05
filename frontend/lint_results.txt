@@ -1,0 +1,226 @@
+
+> frontend@0.0.0 lint
+> eslint .
+
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\components\AnimatedButton.jsx
+  2:9  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\components\FlashSaleBanner.jsx
+  44:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\components\Hero.jsx
+  4:11  error  Parsing error: Adjacent JSX elements must be wrapped in an enclosing tag
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\components\Navbar.jsx
+   3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  38:16  error  'err' is defined but never used                                                no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\components\ProductCard.jsx
+  87:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\components\ReviewGallery.jsx
+  66:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\components\Toast\ToastContainer.jsx
+  2:27  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\components\vendor\CategoryDropdown.jsx
+  3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\components\vendor\ProductForm.jsx
+  251:10  error  'loading' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  357:38  error  'Icon' is defined but never used                                                         no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\components\vendor\VendorTopbar.jsx
+  15:11  error  'user' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                 no-unused-vars
+  15:17  error  'logout' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u               no-unused-vars
+  16:10  error  'searchQuery' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u          no-unused-vars
+  16:23  error  'setSearchQuery' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u       no-unused-vars
+  17:10  error  'showProfileDropdown' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\context\AuthContext.jsx
+   43:14  error  Fast refresh only works when a file only exports components. Move your React context(s) to a separate file                      react-refresh/only-export-components
+  121:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\context\CartContext.jsx
+    5:14  error  Fast refresh only works when a file only exports components. Move your React context(s) to a separate file  react-refresh/only-export-components
+  147:16  error  'e' is defined but never used                                                                               no-unused-vars
+  241:18  error  'err' is defined but never used                                                                             no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\AddAddress.jsx
+  62:11  error  'user' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u         no-unused-vars
+  95:9   error  'fieldLabels' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\BundleDetail.jsx
+  617:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  680:18  error  'err' is defined but never used                                                no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\Bundles.jsx
+  4:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\Checkout.jsx
+  357:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u             no-unused-vars
+  368:10  error  'discount' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  384:16  error  'err' is defined but never used                                                           no-unused-vars
+  384:21  error  Empty block statement                                                                     no-empty
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\EditAddress.jsx
+  120:9  error  'fieldLabels' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\Home.jsx
+    5:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                 no-unused-vars
+   26:21  error  'setFlashSale' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  168:9   error  'imgOf' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u         no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\OrderTracking.jsx
+  74:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\ProductDetail.jsx
+  568:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\Products.jsx
+  246:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  244 |
+  245 |   useEffect(() => {
+> 246 |     loadCategories();
+      |     ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  247 |   }, [loadCategories]);
+  248 |
+  249 |   useEffect(() => {  react-hooks/set-state-in-effect
+  250:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  248 |
+  249 |   useEffect(() => {
+> 250 |     load();
+      |     ^^^^ Avoid calling setState() directly within an effect
+  251 |   }, [load]);
+  252 |
+  253 |   /* ================================              react-hooks/set-state-in-effect
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\Profile.jsx
+  211:14  error  'err' is defined but never used  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\Wishlist.jsx
+  42:6  warning  React Hook useEffect has a missing dependency: 'user'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\admin\AdminBundles.jsx
+  155:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  172:14  error  'err' is defined but never used                                                no-unused-vars
+  192:14  error  'err' is defined but never used                                                no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\admin\AdminCategories.jsx
+  181:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\admin\AdminCoupons.jsx
+  99:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\admin\AdminDiscounts.jsx
+  4:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\admin\AdminEditProduct.jsx
+  184:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\admin\AdminOrders.jsx
+  161:10  error    'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                  no-unused-vars
+  233:6   warning  React Hook useEffect has a missing dependency: 'loadOrders'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  242:5   error    'load' is not defined                                                                                          no-undef
+  260:9   error    'formatDate' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                     no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\admin\AdminProducts.jsx
+  251:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\admin\AdminVendors.jsx
+  123:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        no-unused-vars
+  155:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  153 |
+  154 |   useEffect(() => {
+> 155 |     load();
+      |     ^^^^ Avoid calling setState() directly within an effect
+  156 |   }, [load]);
+  157 |
+  158 |   // Filter vendors based on search and status  react-hooks/set-state-in-effect
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\admin\CreateBundle.jsx
+  210:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  278:14  error  'err' is defined but never used                                                no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\admin\EditBundle.jsx
+    5:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  166:47  error  '_id' is defined but never used                                                no-unused-vars
+  193:14  error  'err' is defined but never used                                                no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\vendor\AddProduct.jsx
+  90:14  error  'err' is defined but never used  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\vendor\EditProduct.jsx
+   33:16  error  'err' is defined but never used  no-unused-vars
+  104:14  error  'err' is defined but never used  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\vendor\StoreSettings.jsx
+  21:26  error  'Icon' is defined but never used  no-unused-vars
+  40:36  error  'Icon' is defined but never used  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\vendor\VendorAddBundle.jsx
+  6:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\vendor\VendorAnalytics.jsx
+  95:6  warning  React Hook useEffect has a missing dependency: 'fetchAnalytics'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\vendor\VendorAuth.jsx
+  285:15  error  'data' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\vendor\VendorBundles.jsx
+  190:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  527:51  error  'index' is defined but never used                                              no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\vendor\VendorEditBundle.jsx
+    7:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  306:14  error  'err' is defined but never used                                                no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\vendor\VendorProducts.jsx
+   18:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  161:14  error  'err' is defined but never used                                                no-unused-vars
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\vendor\VendorReviews.jsx
+  43:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  41 |     };
+  42 |     loadReviews();
+> 43 |     loadStats();
+     |     ^^^^^^^^^ Avoid calling setState() directly within an effect
+  44 |   }, [loadStats]);
+  45 |
+  46 |   // filter by rating  react-hooks/set-state-in-effect
+
+C:\Users\harsh\OneDrive\Desktop\gift1\frontend\src\pages\vendor\VendorStore.jsx
+  367:26  error  'Icon' is defined but never used  no-unused-vars
+
+Γ£û 75 problems (72 errors, 3 warnings)
+

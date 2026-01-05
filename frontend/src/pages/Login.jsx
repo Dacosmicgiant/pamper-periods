@@ -61,7 +61,7 @@ export default function Login() {
             </div>
             <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase">Welcome Back</h2>
             <p className="text-gray-500 mt-2 font-medium">
-              Continue your journey with <span className="text-pink-600">Pamper Periods</span>
+              Continue your journey with <span className="text-pink-600">Pamper Period</span>
             </p>
           </div>
 
@@ -128,7 +128,7 @@ export default function Login() {
 
         {/* Floating Support Info */}
         <p className="text-center mt-8 text-xs text-gray-400 font-medium uppercase tracking-[0.2em]">
-          Secure Access • Pamper Periods 2024
+          Secure Access • Pamper Period 2025
         </p>
       </motion.div>
     </div>

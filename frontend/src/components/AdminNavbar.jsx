@@ -27,7 +27,7 @@ export default function AdminNavbar() {
         </div>
         <div>
           <h1 className="text-sm font-black uppercase tracking-[0.3em] text-gray-900 dark:text-white leading-none">
-            Pamper Periods
+            Pamper Period
           </h1>
           <p className="text-[10px] font-bold text-pink-600 uppercase tracking-widest mt-1">
             Central Command

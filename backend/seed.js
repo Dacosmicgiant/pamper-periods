@@ -8,16 +8,16 @@ const seedAdmin = async () => {
     await connectDB();
     console.log("Connected to MongoDB for seeding...");
 
-    const adminEmail = "vedantvanpro@gmail.com";
+    const adminEmail = "admin@example.com";
     const existingAdmin = await User.findOne({ email: adminEmail });
 
     if (existingAdmin) {
       console.log(`Admin account with email ${adminEmail} already exists.`);
     } else {
       const admin = new User({
-        name: "admin_cosmic",
+        name: "Admin User",
         email: adminEmail,
-        password: "12345678", // Will be hashed by pre-save hook
+        password: "123456", // Will be hashed by pre-save hook
         role: "admin",
       });
 

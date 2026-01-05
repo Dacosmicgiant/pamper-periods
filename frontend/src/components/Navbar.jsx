@@ -34,7 +34,7 @@ export default function Navbar() {
 
     (async () => {
       try {
-        const { data } = await API.get(`/users/${user._id}/wishlist`);
+        const { data } = await API.get("/users/wishlist");
         setWishlistCount(data?.length || 0);
       } catch (err) {
         console.log("Wishlist load error");
@@ -59,21 +59,21 @@ export default function Navbar() {
       className="fixed top-0 w-full z-40 backdrop-blur-xl bg-white/80 shadow-sm"
     >
       <div className="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
-        
+
         {/* ---------------- LOGO ---------------- */}
         <Link to="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-pink-700 flex items-center justify-center text-white font-bold shadow-md">
+          {/* <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-pink-700 flex items-center justify-center text-white font-bold shadow-md">
             PP
+          </div> */}
+          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-md">
+            <img
+              src="pp.jpeg"
+              alt="Pamper Periods Logo"
+              className="w-full h-full object-contain"
+            />
           </div>
-          {/* <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden shadow-md">
-  <img 
-    src={logo} 
-    alt="Pamper Periods Logo" 
-    className="w-full h-full object-contain" 
-  />
-</div> */}
           <div>
-            <div className="text-lg font-semibold">Pamper Periods</div>
+            <div className="text-lg font-semibold">Pamper Period</div>
             <div className="text-xs text-gray-600">Premium gift marketplace</div>
           </div>
         </Link>
@@ -157,7 +157,7 @@ export default function Navbar() {
                     >
                       <FiUser /> Profile
                     </Link>
-{/* 
+                    {/* 
                     <Link
                       to="/orders"
                       onClick={() => setOpenDropdown(false)}

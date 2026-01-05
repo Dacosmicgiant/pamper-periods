@@ -34,7 +34,7 @@ const orderSchema = new mongoose.Schema({
   status: {
     type: String,
     default: "pending",
-    enum: ["pending", "processing", "shipped", "delivered", "cancelled","completed","refunded"]
+    enum: ["pending", "processing", "shipped", "delivered", "cancelled", "completed", "refunded", "failed"]
   }
 
 }, { timestamps: true });
@@ -44,7 +44,7 @@ const orderSchema = new mongoose.Schema({
 // AUTO-GENERATE ORDER NUMBER BEFORE SAVE
 // ===========================================
 orderSchema.pre("save", async function () {
-  if (this.orderNumber) return ;
+  if (this.orderNumber) return;
 
   // Format: ORD-YYYYMMDD-RANDOM6DIGIT
   const date = new Date();
@@ -56,7 +56,7 @@ orderSchema.pre("save", async function () {
 
   this.orderNumber = `ORD-${y}${m}${d}-${random}`;
 
-  
+
 });
 
 module.exports = mongoose.model("Order", orderSchema);
